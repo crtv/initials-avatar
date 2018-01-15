@@ -10,11 +10,12 @@ import (
 	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/font"
 	"golang.org/x/image/math/fixed"
+	"unicode/utf8"
 )
 
 var (
 	errFontRequired = errors.New("font file is required")
-	errInvalidFont  = errors.New("invalid font")
+	errInvalidFont = errors.New("invalid font")
 )
 
 // drawer draws an image.Image
@@ -31,7 +32,7 @@ func newDrawer(fontFile string) (*drawer, error) {
 		return nil, errFontRequired
 	}
 	g := new(drawer)
-	g.fontSize = 75.0
+	g.fontSize = 58.0
 	g.dpi = 72.0
 	g.fontHinting = font.HintingNone
 
@@ -68,6 +69,7 @@ func (g *drawer) Draw(s string, size int, bg *color.RGBA) image.Image {
 	// glyph example: http://www.freetype.org/freetype2/docs/tutorial/metrics.png
 	var gbuf truetype.GlyphBuf
 	var err error
+
 	fsize := fixed.Int26_6(g.fontSize * g.dpi * (64.0 / 72.0))
 	err = gbuf.Load(g.font, fsize, fi, font.HintingFull)
 	if err != nil {
@@ -76,11 +78,14 @@ func (g *drawer) Draw(s string, size int, bg *color.RGBA) image.Image {
 		return dst
 	}
 
+	// letters count
+	cnt := utf8.RuneCountInString(s)
+
 	// center
-	dY := int((size - int(gbuf.Bounds.Max.Y-gbuf.Bounds.Min.Y)>>6) / 2)
-	dX := int((size - int(gbuf.Bounds.Max.X-gbuf.Bounds.Min.X)>>6) / 2)
-	y := int(gbuf.Bounds.Max.Y>>6) + dY
-	x := 0 - int(gbuf.Bounds.Min.X>>6) + dX
+	dY := int((size - int(gbuf.Bounds.Max.Y - gbuf.Bounds.Min.Y) >> 6) / 2)
+	dX := int((size - int(gbuf.Bounds.Max.X - gbuf.Bounds.Min.X) >> 6) * 4 / (2 * (2 + (2 * cnt))))
+	y := int(gbuf.Bounds.Max.Y >> 6) + dY
+	x := 0 - int(gbuf.Bounds.Min.X >> 6) + dX
 
 	drawer.Dot = fixed.Point26_6{
 		X: fixed.I(x),

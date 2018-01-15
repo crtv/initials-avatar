@@ -15,18 +15,18 @@ import (
 
 var (
 	avatarBgColors = map[string]*color.RGBA{
-		"45BDF3": &color.RGBA{69, 189, 243, 255},
+		//"45BDF3": &color.RGBA{69, 189, 243, 255},
 		"E08F70": &color.RGBA{224, 143, 112, 255},
-		"4DB6AC": &color.RGBA{77, 182, 172, 255},
-		"9575CD": &color.RGBA{149, 117, 205, 255},
-		"B0855E": &color.RGBA{176, 133, 94, 255},
-		"F06292": &color.RGBA{240, 98, 146, 255},
-		"A3D36C": &color.RGBA{163, 211, 108, 255},
-		"7986CB": &color.RGBA{121, 134, 203, 255},
-		"F1B91D": &color.RGBA{241, 185, 29, 255},
+		//"4DB6AC": &color.RGBA{77, 182, 172, 255},
+		//"9575CD": &color.RGBA{149, 117, 205, 255},
+		//"B0855E": &color.RGBA{176, 133, 94, 255},
+		//"F06292": &color.RGBA{240, 98, 146, 255},
+		//"A3D36C": &color.RGBA{163, 211, 108, 255},
+		//"7986CB": &color.RGBA{121, 134, 203, 255},
+		//"F1B91D": &color.RGBA{241, 185, 29, 255},
 	}
 
-	defaultColorKey = "45BDF3"
+	defaultColorKey = "E08F70"
 
 	// ErrUnsupportChar is returned when the character is not supported
 	ErrUnsupportChar = errors.New("unsupported character")
@@ -157,8 +157,9 @@ func getInitials(name string) string {
 		return ""
 	}
 	o := opts{
+		allCaps: true,
 		allowEmail: true,
-		limit:      3,
+		limit:      2,
 	}
 	i, _ := parseInitials(strings.NewReader(name), o)
 	return i

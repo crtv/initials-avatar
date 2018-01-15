@@ -8,7 +8,7 @@ import (
 	"strconv"
 
 	"github.com/codegangsta/cli"
-	"github.com/holys/initials-avatar"
+	"github.com/crtv/initials-avatar"
 	"github.com/labstack/echo"
 	mw "github.com/labstack/echo/middleware"
 )
@@ -23,9 +23,9 @@ func newAvatarHandler(fontFile string) *avatarHandler {
 	return h
 }
 
-func (h *avatarHandler) Get(ctx *echo.Context) error {
+func (h *avatarHandler) Get(ctx echo.Context) error {
 	name := ctx.Param("name")
-	size := ctx.Query("size")
+	size := ctx.QueryParam("size")
 	if size == "" {
 		size = "120"
 	}
@@ -61,10 +61,10 @@ func server(ctx *cli.Context) {
 		log.Fatal("invalid font file path")
 	}
 	h := newAvatarHandler(fFile)
-	e.Get("/:name", h.Get)
+	e.GET("/:name", h.Get)
 
 	fmt.Printf("starting at :%d ...\n", port)
-	e.Run(fmt.Sprintf(":%d", port))
+	e.Start(fmt.Sprintf(":%d", port))
 }
 
 func serverCommand() cli.Command {
@@ -77,7 +77,7 @@ func serverCommand() cli.Command {
 			cli.StringFlag{
 				Name:  "fontFile",
 				Usage: "tty font file path",
-				Value: "./resource/fonts/Hiragino_Sans_GB_W3.ttf",
+				Value: "./resource/fonts/RobotoMono-Regular.ttf",
 			},
 			cli.IntFlag{
 				Name:  "port",

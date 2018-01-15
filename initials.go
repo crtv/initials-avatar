@@ -20,13 +20,13 @@ func init() {
 // This controls how parsing of initials is handled.
 type opts struct {
 	// set all initials to capital letters
-	allCaps bool
+	allCaps    bool
 
 	// allow parsing of initials from email messages
 	allowEmail bool
 
 	// set the maximum number of initials allowed
-	limit int
+	limit      int
 }
 
 // Tries to find initials in a given src. The src is a name, the logic that is
@@ -76,7 +76,7 @@ func parseInitials(src io.Reader, o opts) (string, error) {
 		case x == '(':
 			if i > 0 {
 				rb := &bytes.Buffer{}
-			DONE:
+				DONE:
 				for {
 					next, _, err := r.ReadRune()
 					switch next {
