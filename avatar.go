@@ -15,15 +15,15 @@ import (
 
 var (
 	avatarBgColors = map[string]*color.RGBA{
-		//"45BDF3": &color.RGBA{69, 189, 243, 255},
+		"45BDF3": &color.RGBA{69, 189, 243, 255},
 		"E08F70": &color.RGBA{224, 143, 112, 255},
-		//"4DB6AC": &color.RGBA{77, 182, 172, 255},
-		//"9575CD": &color.RGBA{149, 117, 205, 255},
-		//"B0855E": &color.RGBA{176, 133, 94, 255},
-		//"F06292": &color.RGBA{240, 98, 146, 255},
-		//"A3D36C": &color.RGBA{163, 211, 108, 255},
-		//"7986CB": &color.RGBA{121, 134, 203, 255},
-		//"F1B91D": &color.RGBA{241, 185, 29, 255},
+		"4DB6AC": &color.RGBA{77, 182, 172, 255},
+		"9575CD": &color.RGBA{149, 117, 205, 255},
+		"B0855E": &color.RGBA{176, 133, 94, 255},
+		"F06292": &color.RGBA{240, 98, 146, 255},
+		"A3D36C": &color.RGBA{163, 211, 108, 255},
+		"7986CB": &color.RGBA{121, 134, 203, 255},
+		"F1B91D": &color.RGBA{241, 185, 29, 255},
 	}
 
 	defaultColorKey = "E08F70"
@@ -33,7 +33,7 @@ var (
 
 	// ErrUnsupportedEncoding is returned when the given image encoding is not supported
 	ErrUnsupportedEncoding = errors.New("avatar: Unsuppored encoding")
-	c                      = consistent.New()
+	c = consistent.New()
 )
 
 // InitialsAvatar represents an initials avatar.
@@ -92,6 +92,10 @@ func (a *InitialsAvatar) DrawToBytes(name string, size int, encoding ...string) 
 		size = 48 // default size
 	}
 	name = strings.TrimSpace(name)
+	if len(name) == 0 {
+		return nil, errors.New("Name must contain more than 1 character.")
+	}
+
 	firstRune := []rune(name)[0]
 	if !isHan(firstRune) && !unicode.IsLetter(firstRune) {
 		return nil, ErrUnsupportChar
